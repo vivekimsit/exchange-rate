@@ -2,6 +2,10 @@
 
 const joi = require('joi');
 
+const api = require('./api');
+const Exchange = require('./exchange');
+const xmlParser = require('./parse-xml');
+
 const schema = joi
   .object({
     source: joi.string().required().min(3).max(3).example('EUR'),
@@ -14,11 +18,15 @@ const defaults = {
   timeout: 1000 // 1 sec
 };
 
-module.exports = (pair, options = {}) => {
+const exchange = async (pair, options = {}) => {
   options = Object.assign({}, defaults, options);
   const {source, target} = joi.attempt(pair, schema);
-  console.log(options);
-  console.log(source);
-  console.log(target);
-  return 123;
+
+  const {requestApi = api, parser = xmlParser} = options;
+
+  const exchange = new Exchange(requestApi, parser, options);
+  const rate = await exchange.convert({source, target});
+  return {source, target, rate};
 };
+
+module.exports = exchange;
