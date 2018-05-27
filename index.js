@@ -18,7 +18,7 @@ const defaults = {
   timeout: 1000 // 1 sec
 };
 
-const exchange = async function (pair, options = {}) {
+async function createExchange(pair, options = {}) {
   options = Object.assign({}, defaults, options);
   const {source, target} = joi.attempt(pair, schema);
 
@@ -27,6 +27,6 @@ const exchange = async function (pair, options = {}) {
   const exchange = new Exchange(requestApi, parser, options);
   const rate = await exchange.convert({source, target});
   return {source, target, rate};
-};
+}
 
-module.exports = exchange;
+module.exports = createExchange;
