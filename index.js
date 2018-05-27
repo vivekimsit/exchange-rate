@@ -18,7 +18,7 @@ const defaults = {
   timeout: 1000 // 1 sec
 };
 
-const exchange = async (pair, options = {}) => {
+const exchange = async function (pair, options = {}) => {
   options = Object.assign({}, defaults, options);
   const {source, target} = joi.attempt(pair, schema);
 
