@@ -12,7 +12,5 @@ $ npm install exchange-rate
 
 ```js
 const exchange = require('exchange-rate');
-const source = 'EUR';
-const target = 'GBP';
-const result = await exchange({source, target});
+const {source, target, rate} = await exchange.convert({source: 'EUR', target: 'GBP'});
 ```

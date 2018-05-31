@@ -6,8 +6,9 @@ const xml = require('./fake-response');
 test('return exchange rate for valid currency pair', async t => {
   const mockParser = _ => ({
     EUR: 1.0,
-    INR: 79.1505,
-    USD: 1.1675
+    INR: 78.388,
+    GBP: 0.875,
+    USD: 1.1632
   });
   const mockApi = {
     async fetch(_) {
@@ -25,7 +26,7 @@ test('return exchange rate for valid currency pair', async t => {
   let expected = {
     source,
     target,
-    rate: 79.1505
+    rate: 78.388
   };
   t.deepEqual(await exchange.convert({source, target}, options), expected);
 
@@ -34,7 +35,7 @@ test('return exchange rate for valid currency pair', async t => {
   expected = {
     source,
     target,
-    rate: 67.7949
+    rate: 67.39
   };
   t.deepEqual(await exchange.convert({source, target}, options), expected);
 
