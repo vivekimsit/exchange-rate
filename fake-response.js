@@ -8,8 +8,9 @@ const xml =
   </gesmes:Sender>
   <Cube>
     <Cube time="2018-05-18">
-      <Cube currency="USD" rate="1.1781"/>
-      <Cube currency="JPY" rate="130.69"/>
+      <Cube currency="USD" rate="1.1632"/>
+      <Cube currency="INR" rate="78.388"/>
+      <Cube currency="GBP" rate="0.875"/>
     </Cube>
   </Cube>
 </gesmes:Envelope>`;
