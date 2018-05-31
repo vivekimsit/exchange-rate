@@ -1,5 +1,5 @@
 {
-  "name": "exchange-rate",
+  "name": "currency-exchange",
   "version": "1.0.0",
   "description": "Get currency exchange rates",
   "main": "index.js",
