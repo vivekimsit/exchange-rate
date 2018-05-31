@@ -1,32 +1,19 @@
 'use strict';
 
-const joi = require('joi');
-
-const api = require('./api');
-const Exchange = require('./exchange');
-const xmlParser = require('./parse-xml');
-
-const schema = joi
-  .object({
-    source: joi.string().required().min(3).max(3).example('EUR'),
-    target: joi.string().required().min(3).max(3).example('GBP')
-  })
-  .unknown()
-  .required();
+const api = require('./lib/api');
+const Exchange = require('./lib/exchange');
+const xmlParser = require('./lib/parse-xml');
 
 const defaults = {
   timeout: 1000 // 1 sec
 };
 
-async function createExchange(pair, options = {}) {
+function createExchange(pair, options = {}) {
   options = Object.assign({}, defaults, options);
-  const {source, target} = joi.attempt(pair, schema);
 
   const {requestApi = api, parser = xmlParser} = options;
 
-  const exchange = new Exchange(requestApi, parser, options);
-  const rate = await exchange.convert({source, target});
-  return {source, target, rate};
+  return new Exchange(requestApi, parser, options);
 }
 
 module.exports = createExchange;

@@ -1,5 +1,5 @@
 import test from 'ava';
-import m from '.';
+import createExchange from '.';
 
 const xml = require('./fake-response');
 
@@ -18,6 +18,7 @@ test('return exchange rate for valid currency pair', async t => {
     parser: mockParser,
     requestApi: mockApi
   };
+  const exchange = createExchange(options);
 
   let source = 'EUR';
   let target = 'INR';
@@ -26,7 +27,7 @@ test('return exchange rate for valid currency pair', async t => {
     target,
     rate: 79.1505
   };
-  t.deepEqual(await m({source, target}, options), expected);
+  t.deepEqual(await exchange.convert({source, target}, options), expected);
 
   source = 'USD';
   target = 'INR';
@@ -35,7 +36,7 @@ test('return exchange rate for valid currency pair', async t => {
     target,
     rate: 67.7949
   };
-  t.deepEqual(await m({source, target}, options), expected);
+  t.deepEqual(await exchange.convert({source, target}, options), expected);
 
   source = 'INR';
   target = 'USD';
@@ -44,33 +45,49 @@ test('return exchange rate for valid currency pair', async t => {
     target,
     rate: 0.0148
   };
-  t.deepEqual(await m({source, target}, options), expected);
+  t.deepEqual(await exchange.convert({source, target}, options), expected);
 });
 
 test('throw on invalid input', async t => {
+  const mockParser = _ => ({
+    EUR: 1.0,
+    INR: 79.1505,
+    USD: 1.1675
+  });
+  const mockApi = {
+    async fetch(_) {
+      return Promise.resolve(xml);
+    }
+  };
+  const options = {
+    parser: mockParser,
+    requestApi: mockApi
+  };
+  const exchange = createExchange(options);
+
   try {
-    await m('foo');
+    await exchange.convert('foo');
     t.fail();
   } catch (err) {
     t.pass();
   }
 
   try {
-    await m(NaN);
+    await exchange.convert(NaN);
     t.fail();
   } catch (err) {
     t.pass();
   }
 
   try {
-    await m(Infinity);
+    await exchange.convert(Infinity);
     t.fail();
   } catch (err) {
     t.pass();
   }
 
   try {
-    await m({source: 'EUR', target: 'GB'});
+    await exchange.convert({source: 'EUR', target: 'GB'});
     t.fail();
   } catch (err) {
     t.pass();
